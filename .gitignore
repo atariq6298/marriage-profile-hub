@@ -1,0 +1,6 @@
+venv/
+__pycache__/
+*.pyc
+instance/
+marriage_profiles.db
+.env
