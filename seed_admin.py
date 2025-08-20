@@ -1,4 +1,4 @@
-from app import create_app, db, bcrypt
+from flask_app import create_app, db, bcrypt
 from models import User
 
 app = create_app()
