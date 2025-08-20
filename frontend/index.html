@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marriage Profile Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 1200px;
+            min-height: 600px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        /* Login Form Styles */
+        .login-section {
+            display: block;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .login-section.hidden {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            margin-left: 10px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-section {
+            display: none;
+        }
+
+        .dashboard-section.active {
+            display: block;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .user-info {
+            color: #666;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Filters */
+        .filters {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .filters h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .filter-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        /* Profiles Grid */
+        .profiles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .profile-card {
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .profile-info {
+            margin-bottom: 15px;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .profile-info strong {
+            color: #333;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Loading Spinner */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                min-height: auto;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .filter-row {
+                grid-template-columns: 1fr;
+            }
+
+            .profiles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Marriage Profile Hub</h1>
+            <p>Find your perfect match</p>
+        </div>
+
+        <div class="content">
+            <!-- Login Section -->
+            <div id="loginSection" class="login-section">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #333;">Login to Access Profiles</h2>
+                
+                <div id="loginAlert"></div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <button type="submit" class="btn">Login</button>
+                    </div>
+                </form>
+
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 6px;">
+                    <h4 style="color: #666; margin-bottom: 10px;">Demo Credentials:</h4>
+                    <p style="color: #666; margin: 5px 0;"><strong>Username:</strong> admin</p>
+                    <p style="color: #666; margin: 5px 0;"><strong>Password:</strong> admin123</p>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboardSection" class="dashboard-section">
+                <div class="dashboard-header">
+                    <div>
+                        <h2>Marriage Profiles Dashboard</h2>
+                        <div class="user-info">Welcome, <span id="currentUser">User</span></div>
+                    </div>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters">
+                    <h3>Filter Profiles</h3>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label for="filterAge">Age:</label>
+                            <input type="number" id="filterAge" placeholder="Enter age">
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterReligion">Religion:</label>
+                            <input type="text" id="filterReligion" placeholder="Enter religion">
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterCast">Cast:</label>
+                            <input type="text" id="filterCast" placeholder="Enter cast">
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterLocation">Location:</label>
+                            <input type="text" id="filterLocation" placeholder="Enter village/location">
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <button id="applyFilters" class="btn">Apply Filters</button>
+                        <button id="clearFilters" class="btn btn-secondary">Clear Filters</button>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div id="loading" class="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Loading profiles...</p>
+                </div>
+
+                <!-- Profiles Grid -->
+                <div id="profilesGrid" class="profiles-grid"></div>
+
+                <!-- No Results Message -->
+                <div id="noResults" style="display: none; text-align: center; padding: 40px; color: #666;">
+                    <h3>No profiles found</h3>
+                    <p>Try adjusting your filters or check back later for new profiles.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Detail Modal -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Profile Details</h3>
+                <span class="close">&times;</span>
+            </div>
+            <div id="profileDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let authToken = null;
+        let currentUser = null;
+        const API_BASE = '/api';
+
+        // DOM elements
+        const loginSection = document.getElementById('loginSection');
+        const dashboardSection = document.getElementById('dashboardSection');
+        const loginForm = document.getElementById('loginForm');
+        const loginAlert = document.getElementById('loginAlert');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const currentUserSpan = document.getElementById('currentUser');
+        const profilesGrid = document.getElementById('profilesGrid');
+        const loading = document.getElementById('loading');
+        const noResults = document.getElementById('noResults');
+        const profileModal = document.getElementById('profileModal');
+        const profileDetails = document.getElementById('profileDetails');
+
+        // Filter elements
+        const filterAge = document.getElementById('filterAge');
+        const filterReligion = document.getElementById('filterReligion');
+        const filterCast = document.getElementById('filterCast');
+        const filterLocation = document.getElementById('filterLocation');
+        const applyFiltersBtn = document.getElementById('applyFilters');
+        const clearFiltersBtn = document.getElementById('clearFilters');
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for existing token
+            authToken = localStorage.getItem('authToken');
+            currentUser = localStorage.getItem('currentUser');
+            
+            if (authToken) {
+                showDashboard();
+                loadProfiles();
+            } else {
+                showLogin();
+            }
+
+            // Event listeners
+            loginForm.addEventListener('submit', handleLogin);
+            logoutBtn.addEventListener('click', handleLogout);
+            applyFiltersBtn.addEventListener('click', applyFilters);
+            clearFiltersBtn.addEventListener('click', clearFilters);
+
+            // Modal close functionality
+            document.querySelector('.close').addEventListener('click', closeModal);
+            profileModal.addEventListener('click', function(e) {
+                if (e.target === profileModal) {
+                    closeModal();
+                }
+            });
+
+            // Enter key on filters
+            [filterAge, filterReligion, filterCast, filterLocation].forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        applyFilters();
+                    }
+                });
+            });
+        });
+
+        // Authentication functions
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.access_token;
+                    currentUser = username;
+                    
+                    // Store in localStorage
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('currentUser', currentUser);
+
+                    showAlert('Login successful!', 'success');
+                    setTimeout(() => {
+                        showDashboard();
+                        loadProfiles();
+                    }, 1000);
+                } else {
+                    showAlert(data.msg || 'Login failed', 'error');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('Network error. Please try again.', 'error');
+            }
+        }
+
+        function handleLogout() {
+            authToken = null;
+            currentUser = null;
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('currentUser');
+            showLogin();
+        }
+
+        // UI functions
+        function showLogin() {
+            loginSection.classList.remove('hidden');
+            dashboardSection.classList.remove('active');
+            loginForm.reset();
+            clearAlert();
+        }
+
+        function showDashboard() {
+            loginSection.classList.add('hidden');
+            dashboardSection.classList.add('active');
+            currentUserSpan.textContent = currentUser || 'User';
+        }
+
+        function showAlert(message, type) {
+            loginAlert.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+
+        function clearAlert() {
+            loginAlert.innerHTML = '';
+        }
+
+        // Profile functions
+        async function loadProfiles(filters = {}) {
+            if (!authToken) {
+                showLogin();
+                return;
+            }
+
+            showLoading(true);
+            hideNoResults();
+
+            try {
+                // Build query string
+                const queryParams = new URLSearchParams();
+                if (filters.age) queryParams.append('age', filters.age);
+                if (filters.religion) queryParams.append('religion', filters.religion);
+                if (filters.cast) queryParams.append('cast', filters.cast);
+                if (filters.location) queryParams.append('location', filters.location);
+
+                const queryString = queryParams.toString();
+                const url = `${API_BASE}/profiles${queryString ? '?' + queryString : ''}`;
+
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.status === 401) {
+                    // Token expired
+                    handleLogout();
+                    return;
+                }
+
+                const profiles = await response.json();
+
+                if (response.ok) {
+                    displayProfiles(profiles);
+                } else {
+                    console.error('Failed to load profiles:', profiles);
+                    showNoResults();
+                }
+            } catch (error) {
+                console.error('Error loading profiles:', error);
+                showNoResults();
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayProfiles(profiles) {
+            profilesGrid.innerHTML = '';
+
+            if (profiles.length === 0) {
+                showNoResults();
+                return;
+            }
+
+            profiles.forEach(profile => {
+                const profileCard = createProfileCard(profile);
+                profilesGrid.appendChild(profileCard);
+            });
+        }
+
+        function createProfileCard(profile) {
+            const card = document.createElement('div');
+            card.className = 'profile-card';
+            card.innerHTML = `
+                <h4>${profile.name}</h4>
+                <div class="profile-info">
+                    <p><strong>Age:</strong> ${profile.age}</p>
+                    <p><strong>Religion:</strong> ${profile.religion}</p>
+                    ${profile.cast ? `<p><strong>Cast:</strong> ${profile.cast}</p>` : ''}
+                    ${profile.village ? `<p><strong>Village:</strong> ${profile.village}</p>` : ''}
+                    <p><strong>Phone:</strong> ${profile.phone}</p>
+                </div>
+                <button class="btn" onclick="showProfileDetails(${profile.id})">View Details</button>
+            `;
+            return card;
+        }
+
+        async function showProfileDetails(profileId) {
+            try {
+                const response = await fetch(`${API_BASE}/profiles/${profileId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.status === 401) {
+                    handleLogout();
+                    return;
+                }
+
+                const profile = await response.json();
+
+                if (response.ok) {
+                    profileDetails.innerHTML = `
+                        <div class="profile-info">
+                            <h4>${profile.name}</h4>
+                            <p><strong>Age:</strong> ${profile.age}</p>
+                            <p><strong>Religion:</strong> ${profile.religion}</p>
+                            ${profile.cast ? `<p><strong>Cast:</strong> ${profile.cast}</p>` : ''}
+                            ${profile.village ? `<p><strong>Village:</strong> ${profile.village}</p>` : ''}
+                            <p><strong>Phone:</strong> ${profile.phone}</p>
+                            <p><strong>Profile ID:</strong> ${profile.id}</p>
+                        </div>
+                    `;
+                    profileModal.classList.add('active');
+                } else {
+                    console.error('Failed to load profile details:', profile);
+                }
+            } catch (error) {
+                console.error('Error loading profile details:', error);
+            }
+        }
+
+        function closeModal() {
+            profileModal.classList.remove('active');
+        }
+
+        // Filter functions
+        function applyFilters() {
+            const filters = {};
+            
+            if (filterAge.value.trim()) filters.age = filterAge.value.trim();
+            if (filterReligion.value.trim()) filters.religion = filterReligion.value.trim();
+            if (filterCast.value.trim()) filters.cast = filterCast.value.trim();
+            if (filterLocation.value.trim()) filters.location = filterLocation.value.trim();
+
+            loadProfiles(filters);
+        }
+
+        function clearFilters() {
+            filterAge.value = '';
+            filterReligion.value = '';
+            filterCast.value = '';
+            filterLocation.value = '';
+            loadProfiles();
+        }
+
+        // Utility functions
+        function showLoading(show) {
+            loading.style.display = show ? 'block' : 'none';
+        }
+
+        function showNoResults() {
+            noResults.style.display = 'block';
+        }
+
+        function hideNoResults() {
+            noResults.style.display = 'none';
+        }
+
+        // Global function for profile details (called from onclick)
+        window.showProfileDetails = showProfileDetails;
+    </script>
+</body>
+</html>

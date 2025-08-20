@@ -1,12 +1,13 @@
 # Marriage Profile Hub
 
-A Flask-based API for managing marriage profiles with admin-only modification privileges.
+A Flask-based API for managing marriage profiles with admin-only modification privileges, featuring a simple JavaScript frontend dashboard.
 
 ## Features
 - JWT authentication for users
 - Only admins can add, edit, or delete profiles
 - All authenticated users can view and filter profiles
 - User management endpoints for admins
+- **Simple JavaScript frontend dashboard for easy profile browsing**
 
 ## Quick Start
 
@@ -33,7 +34,28 @@ A Flask-based API for managing marriage profiles with admin-only modification pr
    python app.py
    ```
 
-5. See `DEPLOYMENT_STEPS.md` for deployment instructions.
+5. **Access the frontend at: http://localhost:5000**
+
+6. See `DEPLOYMENT_STEPS.md` for deployment instructions.
+
+## Frontend Dashboard
+
+The frontend is located at `frontend/index.html` and provides:
+
+- **Login Interface**: Secure authentication using JWT tokens
+- **Profile Dashboard**: Browse all marriage profiles in a clean grid layout
+- **Advanced Filtering**: Filter profiles by age, religion, cast, and location
+- **Profile Details**: View detailed information in a modal popup
+- **Responsive Design**: Works on desktop and mobile devices
+- **Demo Credentials**: admin / admin123 (as shown on login page)
+
+### Frontend Features:
+- Pure JavaScript (no frameworks required)
+- Real-time API integration with the Flask backend
+- JWT token management with localStorage
+- Responsive CSS design
+- Error handling and loading states
+- Filter functionality matching API capabilities
 
 ## Endpoints
 

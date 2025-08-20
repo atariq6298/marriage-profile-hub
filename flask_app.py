@@ -8,7 +8,7 @@ bcrypt = Bcrypt()
 jwt = JWTManager()
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='frontend', static_url_path='')
     app.config['SECRET_KEY'] = 'your-very-secure-secret-key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///marriage_profiles.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -21,9 +21,11 @@ def create_app():
     from routes import api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
 
+    # Route to serve the frontend
+    @app.route('/')
+    def index():
+        return app.send_static_file('index.html')
+
     return app
 
 app = create_app()  # <-- This is crucial for WSGI!
-
-if __name__ == "__main__":
-    app.run(debug=True)
