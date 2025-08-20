@@ -17,7 +17,7 @@ A Flask-based API for managing marriage profiles with admin-only modification pr
 
 2. Initialize the database:
    ```python
-   from app import create_app, db
+   from flask_app import create_app, db
    app = create_app()
    with app.app_context():
        db.create_all()
@@ -30,7 +30,7 @@ A Flask-based API for managing marriage profiles with admin-only modification pr
 
 4. Run the server:
    ```
-   python app.py
+   python flask_app.py
    ```
 
 5. See `DEPLOYMENT_STEPS.md` for deployment instructions.
